@@ -1,0 +1,1 @@
+Didn't make my own merkle tree hashing for transactions because im just going to assume encoding lists in python does that for me. Definitely not something to do in industry though, need more research into that.
