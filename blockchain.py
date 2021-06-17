@@ -38,13 +38,13 @@ class Blockchain(object):
            })
        return self.last_block['index']
 
-    def hash(self, block, nonce=0):
+    def hash(self, block):
         """The follow code will create a SHA-256 block hash and also ensure that the dictionary is ordered"""
         h = hashlib.sha256()
         h.update(
-            str(nonce).encode('utf-8') +
+            str(self.nonce).encode('utf-8') +
             str(block['index']).encode('utf-8') +
-            str(self.current_transactions).encode('utf-8') +
+            str(block['transactions']).encode('utf-8') +
             str(block['timestamp']).encode('utf-8') +
             str(block['previous_hash']).encode('utf-8') 
         )
@@ -58,16 +58,15 @@ class Blockchain(object):
     def proof_of_work(self, block):
         """This method is where you the consensus algorithm is implemented.
         It takes two parameters including self and last_proof"""
-        nonce = 0
-        while self.valid_proof(block, nonce) is False:
-            nonce +=1
+        while self.valid_proof(block, self.nonce) is False:
+            self.nonce +=1
 
-        return nonce
+        return self.nonce
 
 
-    def valid_proof(self, block, nonce):
+    def valid_proof(self, block):
         """This method validates the block"""
-        if int(self.hash(block, nonce), 16) <= self.target:
+        if int(self.hash(block, self.nonce), 16) <= self.target:
             return True
         else: 
             return False
